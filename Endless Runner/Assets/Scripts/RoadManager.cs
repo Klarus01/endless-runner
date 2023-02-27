@@ -17,7 +17,6 @@ public class RoadManager : MonoBehaviour
     public Transform halfOfRoad;
 
     private float spawnZ = 0f;
-    private int lastPrefabIndex = 0;
 
     private GameObject lastPref;
     private float rotate = 0;

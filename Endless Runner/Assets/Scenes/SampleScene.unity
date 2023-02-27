@@ -132,7 +132,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 410381617}
-  - component: {fileID: 410381616}
+  - component: {fileID: 410381618}
   m_Layer: 0
   m_Name: CameraFollow
   m_TagString: Untagged
@@ -140,19 +140,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &410381616
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 410381615}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 686f8027ddb62c44c9d734b1156fd916, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerTransform: {fileID: 1974791402}
 --- !u!4 &410381617
 Transform:
   m_ObjectHideFlags: 0
@@ -169,6 +156,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &410381618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410381615}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e49063e65761d345ae9f425c0f6b988, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTransform: {fileID: 1974791402}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -677,7 +677,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1885595557}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f15206158129d1749bffa80e495dd4d8, type: 3}
+  m_Script: {fileID: 11500000, guid: 57cd58d292cdc5e469f5d13f15a0538d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   roadPrefabs:
@@ -686,7 +686,7 @@ MonoBehaviour:
   cornerPrefabs:
   - {fileID: 7379348379329899578, guid: b0c4d0ddbd65f674d91eaa3d55fc1d36, type: 3}
   - {fileID: 636963717900820028, guid: dab1f26011ba73849ac6ba6bc3adcc76, type: 3}
-  roadLength: 6
+  roadLength: 10
   numRoadsOnScreen: 0
   cornerNow: 0
   cornerMax: 3
@@ -738,7 +738,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1974791397}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92fc5e9f9aa6faa4cbe308ac0ec8699f, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d2ad57346892f940a4bca9d5243b7b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gravity: 20
@@ -746,7 +746,7 @@ MonoBehaviour:
   changeRowSpeed: 5
   horizontalInput: 0
   health: 3
-  points: 0
+  points: 1
   getMoveSpeed: 10
   pointsText: {fileID: 1044758426}
 --- !u!136 &1974791399
