@@ -71,10 +71,10 @@ public class RoadManager : MonoBehaviour
     {
         GameObject go;
 
-        if (prefabIndex == -1)
-        {
+        if (prefabIndex == -1 && cornerNow != cornerMax)
             prefabIndex = Random.Range(0, roadPrefabs.Length);
-        }
+        else
+            prefabIndex = Random.Range(0, cornerPrefabs.Length);
 
 
         if (cornerNow != cornerMax)

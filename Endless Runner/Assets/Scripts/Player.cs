@@ -35,11 +35,11 @@ public class Player : MonoBehaviour
 
         if(Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.A))
         {
-            transform.Rotate(Vector3.up, -1f);
+            transform.Rotate(Vector3.up, -.2f);
         }
         else if(Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.D))
         {
-            transform.Rotate(Vector3.up, 1f);
+            transform.Rotate(Vector3.up, .2f);
         }
         else
         {

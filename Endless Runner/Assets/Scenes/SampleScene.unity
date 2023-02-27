@@ -683,6 +683,8 @@ MonoBehaviour:
   roadPrefabs:
   - {fileID: 7517621498624924253, guid: 8d9010d9abcec4f419cd23857408082c, type: 3}
   - {fileID: 2186095274065240173, guid: 103bd42c0185dd44aa255d45608dd7c1, type: 3}
+  - {fileID: 2186095274065240173, guid: fbebe425c0315c844a9c99f1c9a59a8c, type: 3}
+  - {fileID: 2186095274065240173, guid: 290269c78807f78418ec3f40b2501ddc, type: 3}
   cornerPrefabs:
   - {fileID: 7379348379329899578, guid: b0c4d0ddbd65f674d91eaa3d55fc1d36, type: 3}
   - {fileID: 636963717900820028, guid: dab1f26011ba73849ac6ba6bc3adcc76, type: 3}
