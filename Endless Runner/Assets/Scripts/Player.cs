@@ -42,7 +42,7 @@ public class Player : MonoBehaviour
             horizontalInput = Input.GetAxisRaw("Horizontal");
         }
 
-        transform.Translate(new Vector3(horizontalInput, 0, moveSpeed) * Time.deltaTime);
+        transform.Translate(new Vector3(horizontalInput * 5f, 0, moveSpeed) * Time.deltaTime);
 
     }
 

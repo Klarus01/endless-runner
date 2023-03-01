@@ -8,6 +8,7 @@ public class RoadManager : MonoBehaviour
     public GameObject[] cornerPrefabs;
 
     private int numRoadsOnScreen = 0;
+    private int previousPrefabIndex = -1;
     private int cornerNow = 0;
     private int cornerMax = 3;
 
@@ -68,11 +69,17 @@ public class RoadManager : MonoBehaviour
     {
         GameObject road;
 
-        if (prefabIndex !=  -1)
-            road = Instantiate(roadPrefabs[0]) as GameObject;
+        if (prefabIndex != -1)
+        {
+            prefabIndex = 0;
+            road = Instantiate(roadPrefabs[prefabIndex]) as GameObject;
+        }
         else if (cornerNow != cornerMax)
         {
-            prefabIndex = Random.Range(0, roadPrefabs.Length);
+            do
+            {
+                prefabIndex = Random.Range(0, roadPrefabs.Length);
+            } while (prefabIndex == previousPrefabIndex);
             road = Instantiate(roadPrefabs[prefabIndex]) as GameObject;
         }
         else
@@ -85,6 +92,8 @@ public class RoadManager : MonoBehaviour
 
         cornerNow++;
         road.transform.SetParent(transform);
+
+        
 
 
 
@@ -100,6 +109,7 @@ public class RoadManager : MonoBehaviour
         }
 
         numRoadsOnScreen++;
+        previousPrefabIndex = prefabIndex;
         activeRoads.Add(road);
         halfOfRoad = activeRoads[activeRoads.Count / 2].transform;
         lastPref = road;
