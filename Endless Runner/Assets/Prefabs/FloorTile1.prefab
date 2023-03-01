@@ -10,12 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 2658851371229732974}
   - component: {fileID: 2658851371229732975}
-  - component: {fileID: 2658851371229732972}
   - component: {fileID: 4931988131491710462}
   - component: {fileID: 7793855711721455751}
   m_Layer: 6
   m_Name: WallR
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -48,18 +47,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2658851371229732972
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2658851371229732973}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 124131e3b30e65c4baf5546112ae7831, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!33 &4931988131491710462
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -120,12 +107,11 @@ GameObject:
   m_Component:
   - component: {fileID: 2658851372386298939}
   - component: {fileID: 2658851372386298934}
-  - component: {fileID: 2658851372386298937}
   - component: {fileID: 4274600788350827740}
   - component: {fileID: 7645936210767954944}
   m_Layer: 6
   m_Name: WallL
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -158,18 +144,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2658851372386298937
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2658851372386298935}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 124131e3b30e65c4baf5546112ae7831, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!23 &4274600788350827740
 MeshRenderer:
   m_ObjectHideFlags: 0

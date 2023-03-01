@@ -9,8 +9,8 @@ TagManager:
   - NextTile
   - TurnLeft
   - TurnRight
-  - Left
   - EndPosition
+  - Coin
   layers:
   - Default
   - TransparentFX

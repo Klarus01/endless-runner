@@ -7,7 +7,7 @@ public class NextTile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "NextTile")
+        if (other.gameObject.CompareTag("NextTile"))
             Destroy(this.gameObject);
     }
     

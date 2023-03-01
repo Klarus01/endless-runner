@@ -6,26 +6,22 @@ using TMPro;
 public class Player : MonoBehaviour
 {
 
-    public float gravity = 20.0f;
-    public float moveSpeed = 10f;
-    public float changeRowSpeed = 5f;
-    public float horizontalInput;
-    public int health = 3;
-    public int points = 1;
-    public float getMoveSpeed = 10;
+    private float moveSpeed = 10f;
+    private float horizontalInput;
+    private int health = 3;
+    private int points = 1;
+    private float getMoveSpeed = 10;
+    private int coins = 0;
 
     public TMP_Text pointsText;
     Rigidbody rb;
-    RoadManager rm;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rm = FindObjectOfType<RoadManager>();
         rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
         rb.freezeRotation = true;
         rb.useGravity = false;
-        InvokeRepeating("SpawnPoints", 1f, 1f);
     }
 
 
@@ -35,18 +31,18 @@ public class Player : MonoBehaviour
 
         if(Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.A))
         {
-            transform.Rotate(Vector3.up, -.2f);
+            transform.Rotate(Vector3.up, -1f);
         }
         else if(Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.D))
         {
-            transform.Rotate(Vector3.up, .2f);
+            transform.Rotate(Vector3.up, 1f);
         }
         else
         {
             horizontalInput = Input.GetAxisRaw("Horizontal");
         }
 
-        transform.Translate(new Vector3(horizontalInput * changeRowSpeed, 0, moveSpeed) * Time.deltaTime);
+        transform.Translate(new Vector3(horizontalInput, 0, moveSpeed) * Time.deltaTime);
 
     }
 
@@ -63,11 +59,21 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Obstacle")
+        if (other.CompareTag("Obstacle"))
         {
             health--;
             if (health <= 0)
                 Destroy(gameObject);
         }
+
+        if(other.CompareTag("Coin"))
+        {
+            coins++;
+            SpawnPoints();
+            Destroy(other.gameObject);
+        }
+
+        if(other.CompareTag("Wall"))
+            Destroy(gameObject);
     }
 }
