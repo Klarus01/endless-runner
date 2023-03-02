@@ -25,7 +25,7 @@ public class RoadManager : MonoBehaviour
         playerTransform = FindObjectOfType<Player>().GetComponent<Transform>();
         for (int i = 0; i < 5; i++)
         {
-            if (i == 0)
+            if (i < 2)
             {
                 SpawnRoad(0);
             }
@@ -34,6 +34,7 @@ public class RoadManager : MonoBehaviour
                 SpawnRoad();
             }
         }
+
     }
 
     private void Update()
@@ -42,24 +43,15 @@ public class RoadManager : MonoBehaviour
         if (playerTransform == null)
             return;
 
-        if (numRoadsOnScreen < 21)
+        float distanceToHalf = Vector3.Distance(playerTransform.position, halfOfRoad.position);
+
+        if (numRoadsOnScreen < 11)
         {
 
-            if (playerTransform.position.z > 0 || playerTransform.position.x > 0)
+            if (distanceToHalf < 8f)
             {
-                if (playerTransform.position.z + 3 > halfOfRoad.position.z && playerTransform.position.z - 3 < halfOfRoad.position.z || playerTransform.position.x + 3 > halfOfRoad.position.x && playerTransform.position.x - 3 < halfOfRoad.position.x)
-                {
-                    DeleteRoad();
-                    SpawnRoad();
-                }
-            }
-            else
-            {
-                if (playerTransform.position.z - 3 < halfOfRoad.position.z && playerTransform.position.z + 3 > halfOfRoad.position.z || playerTransform.position.x - 3 < halfOfRoad.position.x && playerTransform.position.x + 3 > halfOfRoad.position.x)
-                {
-                    DeleteRoad();
-                    SpawnRoad();
-                }
+                DeleteRoad(activeRoads[0]);
+                SpawnRoad();
             }
         }
         
@@ -96,7 +88,6 @@ public class RoadManager : MonoBehaviour
         
 
 
-
         if (lastPref != null)
         {
             if (lastPref.CompareTag("TurnLeft"))
@@ -115,12 +106,11 @@ public class RoadManager : MonoBehaviour
         lastPref = road;
     }
 
-    private void DeleteRoad()
+    private void DeleteRoad(GameObject roadToDestroy)
     {
-        if(activeRoads.Count >= 20)
+        if(activeRoads.Count >= 10)
         {
             numRoadsOnScreen--;
-            GameObject roadToDestroy = activeRoads[0];
             activeRoads.RemoveAt(0);
             Destroy(roadToDestroy);
         }
