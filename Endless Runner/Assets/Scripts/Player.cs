@@ -1,81 +1,47 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
-    private float moveSpeed = 10f;
-    private float horizontalInput;
-    private int health = 3;
-    private int points = 1;
-    private float getMoveSpeed = 10;
-    private int coins = 0;
-
     public TMP_Text pointsText;
-    Rigidbody rb;
 
-    void Start()
+    private Rigidbody rb;
+    private SceneTrasitions sceneTransition;
+
+    public int health = 3;
+    public float moveSpeed = 10f;
+
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        rb.constraints = RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionZ;
         rb.freezeRotation = true;
         rb.useGravity = false;
-
-        InvokeRepeating("SpawnPoints", 1f, 1f);
+        sceneTransition = FindObjectOfType<SceneTrasitions>();
     }
 
-
-    void Update()
+    private void Update()
     {
-
-
-        if(Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.A))
         {
-            transform.Rotate(Vector3.up, -.2f);
+            transform.Rotate(Vector3.up, -100f * Time.deltaTime);
         }
-        else if(Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.D))
         {
-            transform.Rotate(Vector3.up, .2f);
-        }
-        else
-        {
-            horizontalInput = Input.GetAxisRaw("Horizontal");
+            transform.Rotate(Vector3.up, 100f * Time.deltaTime);
         }
 
-        transform.Translate(new Vector3(horizontalInput * 5f, 0, moveSpeed) * Time.deltaTime);
-
+        rb.velocity = transform.forward * moveSpeed;
     }
 
-    void SpawnPoints()
+    public void GiveDamege(int damage)
     {
-        points++;
-        pointsText.text = "" + points;
-        if (points > getMoveSpeed)
+        health -= damage;
+        if (health <= 0)
         {
-            moveSpeed *= 1.1f;
-            getMoveSpeed += getMoveSpeed;
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Obstacle"))
-        {
-            health--;
-            if (health <= 0)
-                Destroy(gameObject);
-        }
-
-        if(other.CompareTag("Coin"))
-        {
-            coins++;
-            SpawnPoints();
-            Destroy(other.gameObject);
-        }
-
-        if(other.CompareTag("Wall"))
             Destroy(gameObject);
+            sceneTransition.LoadScene("Menu");
+        }
     }
+
+
 }

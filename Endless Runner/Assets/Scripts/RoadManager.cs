@@ -1,18 +1,16 @@
 using System.Collections.Generic;
-using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
 public class RoadManager : MonoBehaviour
 {
     public GameObject[] roadPrefabs;
     public GameObject[] cornerPrefabs;
+    public List<GameObject> activeRoads = new();
 
     private int numRoadsOnScreen = 0;
     private int previousPrefabIndex = -1;
     private int cornerNow = 0;
     private int cornerMax = 3;
-
-    public List<GameObject> activeRoads = new();
 
     private Transform playerTransform;
     private Transform halfOfRoad;
@@ -22,7 +20,7 @@ public class RoadManager : MonoBehaviour
 
     private void Start()
     {
-        playerTransform = FindObjectOfType<Player>().GetComponent<Transform>();
+        playerTransform = FindObjectOfType<Player>().transform;
         for (int i = 0; i < 5; i++)
         {
             if (i < 2)
@@ -39,7 +37,6 @@ public class RoadManager : MonoBehaviour
 
     private void Update()
     {
-
         if (playerTransform == null)
             return;
 
@@ -47,14 +44,13 @@ public class RoadManager : MonoBehaviour
 
         if (numRoadsOnScreen < 11)
         {
-
             if (distanceToHalf < 8f)
             {
-                DeleteRoad(activeRoads[0]);
+                TryDeleteRoad(activeRoads[0]);
                 SpawnRoad();
             }
         }
-        
+
     }
 
     private void SpawnRoad(int prefabIndex = -1)
@@ -63,8 +59,7 @@ public class RoadManager : MonoBehaviour
 
         if (prefabIndex != -1)
         {
-            prefabIndex = 0;
-            road = Instantiate(roadPrefabs[prefabIndex]) as GameObject;
+            road = Instantiate(roadPrefabs[prefabIndex]);
         }
         else if (cornerNow != cornerMax)
         {
@@ -72,21 +67,18 @@ public class RoadManager : MonoBehaviour
             {
                 prefabIndex = Random.Range(0, roadPrefabs.Length);
             } while (prefabIndex == previousPrefabIndex);
-            road = Instantiate(roadPrefabs[prefabIndex]) as GameObject;
+            road = Instantiate(roadPrefabs[prefabIndex]);
         }
         else
         {
             cornerNow = 0;
             cornerMax = Random.Range(4, 6);
             prefabIndex = Random.Range(0, cornerPrefabs.Length);
-            road = Instantiate(cornerPrefabs[prefabIndex]) as GameObject;
+            road = Instantiate(cornerPrefabs[prefabIndex]);
         }
 
         cornerNow++;
         road.transform.SetParent(transform);
-
-        
-
 
         if (lastPref != null)
         {
@@ -106,9 +98,9 @@ public class RoadManager : MonoBehaviour
         lastPref = road;
     }
 
-    private void DeleteRoad(GameObject roadToDestroy)
+    private void TryDeleteRoad(GameObject roadToDestroy)
     {
-        if(activeRoads.Count >= 10)
+        if (activeRoads.Count >= 10)
         {
             numRoadsOnScreen--;
             activeRoads.RemoveAt(0);
