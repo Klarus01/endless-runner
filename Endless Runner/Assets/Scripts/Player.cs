@@ -15,17 +15,16 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-        rb.useGravity = false;
         sceneTransition = FindObjectOfType<SceneTrasitions>();
     }
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A))
         {
             transform.Rotate(Vector3.up, -100f * Time.deltaTime);
         }
-        else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.D))
         {
             transform.Rotate(Vector3.up, 100f * Time.deltaTime);
         }
@@ -42,6 +41,4 @@ public class Player : MonoBehaviour
             sceneTransition.LoadScene("Menu");
         }
     }
-
-
 }

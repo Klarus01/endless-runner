@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class Wall : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.TryGetComponent<Player>(out Player player))
+        if (collision.gameObject.TryGetComponent<Player>(out Player player))
         {
-            Destroy(player);
+            player.GiveDamege(100);
         }
     }
 }

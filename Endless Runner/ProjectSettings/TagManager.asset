@@ -4,10 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - NextTile
   - TurnLeft
   - TurnRight
-  - EndPosition
   - Road
   layers:
   - Default

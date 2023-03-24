@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public int points = 0;
     public int highscore = 0;
     public int coins = 0;
-    private float pointsNeededToGetMoveSpeed = 10;
+    public float pointsNeededToGetMoveSpeed = 10;
     private readonly float speedUpPlayer = 1.1f;
 
 

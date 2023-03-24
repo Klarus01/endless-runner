@@ -8,11 +8,12 @@ public class SceneTrasitions : MonoBehaviour
         if (sceneName.Equals("Game"))
         {
             GameManager.instance.points = 0;
+            GameManager.instance.pointsNeededToGetMoveSpeed = 10;
         }
         SceneManager.LoadScene(sceneName);
     }
 
-    public void doExitGame()
+    public void DoExitGame()
     {
         Application.Quit();
         Debug.Log("XD");

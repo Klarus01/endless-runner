@@ -3,21 +3,20 @@ using UnityEngine;
 
 public class RoadManager : MonoBehaviour
 {
-    public GameObject[] roadPrefabs;
-    public GameObject[] cornerPrefabs;
-    public List<GameObject> activeRoads = new();
+    private GameObject[] roadPrefabs;
+    private GameObject[] cornerPrefabs;
+    private List<GameObject> activeRoads = new();
 
-    private int numRoadsOnScreen = 0;
+    private int rotate = 0;
+    private int zRoad = -10;
+    private int xRoad = 0;
     private int previousIndex = -1;
     private int lastCorner = 0;
     private int maxLengthToLastCorner = 3;
-    private int index;
 
     private Transform playerTransform;
     private Transform halfOfRoad;
-
     private GameObject lastPref;
-    private float rotate = 0;
 
     private void Start()
     {
@@ -32,7 +31,7 @@ public class RoadManager : MonoBehaviour
 
         float distanceToHalf = Vector3.Distance(playerTransform.position, halfOfRoad.position);
 
-        if (numRoadsOnScreen < 11)
+        if (activeRoads.Count < 11)
         {
             if (distanceToHalf < 8f)
             {
@@ -44,17 +43,21 @@ public class RoadManager : MonoBehaviour
 
     private void SpawnStartingRoads()
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 10; i++)
         {
             SpawnRoad();
         }
     }
 
-    private void SpawnRoad()
+    private void SpawnRoad(int index = -1)
     {
         GameObject road;
 
-        if (lastCorner != maxLengthToLastCorner)
+        if (index != -1)
+        {
+            road = Instantiate(roadPrefabs[index]);
+        }
+        else if (lastCorner != maxLengthToLastCorner)
         {
             do
             {
@@ -72,20 +75,43 @@ public class RoadManager : MonoBehaviour
 
         lastCorner++;
         road.transform.SetParent(transform);
+        lastPref = road;
 
-        if (lastPref != null)
+        if (rotate.Equals(-90) || rotate.Equals(270))
         {
-            if (lastPref.CompareTag("TurnLeft"))
-                rotate -= 90f;
-            if (lastPref.CompareTag("TurnRight"))
-                rotate += +90f;
-
-            road.transform.position = lastPref.transform.GetChild(0).position;
-            road.transform.Rotate(0f, rotate, 0f);
+            xRoad -= 10;
+        }
+        else if (rotate.Equals(90) || rotate.Equals(-270))
+        {
+            xRoad += 10;
+        }
+        else if (rotate.Equals(180) || rotate.Equals(-180))
+        {
+            zRoad -= 10;
+        }
+        else
+        {
+            zRoad += 10;
         }
 
-        lastPref = road;
-        numRoadsOnScreen++;
+        Vector3 roadPlace = new(xRoad, 0f, zRoad);
+        road.transform.position = roadPlace;
+        road.transform.Rotate(0, rotate, 0);
+
+        if (lastPref.CompareTag("TurnLeft"))
+        {
+            rotate -= 90;
+        }
+        else if (lastPref.CompareTag("TurnRight"))
+        {
+            rotate += 90;
+        }
+
+        if (rotate.Equals(-360) || rotate.Equals(360))
+        {
+            rotate = 0;
+        }
+
         activeRoads.Add(road);
         previousIndex = index;
         halfOfRoad = activeRoads[activeRoads.Count / 2].transform;
@@ -95,7 +121,6 @@ public class RoadManager : MonoBehaviour
     {
         if (activeRoads.Count >= 10)
         {
-            numRoadsOnScreen--;
             activeRoads.RemoveAt(0);
             Destroy(roadToDestroy);
         }

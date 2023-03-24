@@ -10,11 +10,13 @@ public class SetupMenuPanel : MonoBehaviour
 
     private void Awake()
     {
-        coinsText.SetText(GameManager.instance.coins.ToString());
-        if (GameManager.instance.highscore < GameManager.instance.points)
+        GameManager gm = GameManager.instance;
+
+        coinsText.SetText(gm.coins.ToString());
+        if (gm.highscore < gm.points)
         {
-            GameManager.instance.highscore = GameManager.instance.points;
+            gm.highscore = gm.points;
         }
-        highscoreText.SetText("Highscore: " + GameManager.instance.highscore);
+        highscoreText.SetText("Highscore: " + gm.highscore);
     }
 }
