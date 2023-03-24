@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class RoadManager : MonoBehaviour
 {
+    [SerializeField]
     private GameObject[] roadPrefabs;
+    [SerializeField]
     private GameObject[] cornerPrefabs;
     private List<GameObject> activeRoads = new();
 
@@ -43,9 +45,16 @@ public class RoadManager : MonoBehaviour
 
     private void SpawnStartingRoads()
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 6; i++)
         {
-            SpawnRoad();
+            if (i < 3)
+            {
+                SpawnRoad(0);
+            }
+            else
+            {
+                SpawnRoad();
+            }
         }
     }
 
@@ -56,6 +65,7 @@ public class RoadManager : MonoBehaviour
         if (index != -1)
         {
             road = Instantiate(roadPrefabs[index]);
+            Debug.Log(index + " " + roadPrefabs[index].name);
         }
         else if (lastCorner != maxLengthToLastCorner)
         {
