@@ -10,6 +10,9 @@ public class Player : MonoBehaviour
 
     public int health = 3;
     public float moveSpeed = 10f;
+    [SerializeField]
+    private float maxMoveSpeed;
+    private float restorationSpeed = 5f;
 
     private void Awake()
     {
@@ -29,12 +32,19 @@ public class Player : MonoBehaviour
             transform.Rotate(Vector3.up, 100f * Time.deltaTime);
         }
 
+        if (moveSpeed < maxMoveSpeed)
+        {
+            moveSpeed += restorationSpeed * Time.deltaTime;
+        }
+
         rb.velocity = transform.forward * moveSpeed;
     }
 
     public void GiveDamege(int damage)
     {
         health -= damage;
+        maxMoveSpeed = moveSpeed;
+        moveSpeed = maxMoveSpeed / 2;
         if (health <= 0)
         {
             Destroy(gameObject);

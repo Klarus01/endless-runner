@@ -2,11 +2,16 @@ using UnityEngine;
 
 public class Obstacle : MonoBehaviour
 {
-    private void OnTriggerEnter(Collider other)
+    private float knockbackForce = 10000f;
+
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.TryGetComponent<Player>(out Player player))
+        if (collision.gameObject.TryGetComponent<Player>(out Player player))
         {
+            Rigidbody rb = player.GetComponent<Rigidbody>();
+            rb.AddForce(-transform.forward * knockbackForce);
             player.GiveDamege(1);
+            Destroy(gameObject);
         }
     }
 }

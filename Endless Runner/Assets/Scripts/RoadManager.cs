@@ -65,7 +65,6 @@ public class RoadManager : MonoBehaviour
         if (index != -1)
         {
             road = Instantiate(roadPrefabs[index]);
-            Debug.Log(index + " " + roadPrefabs[index].name);
         }
         else if (lastCorner != maxLengthToLastCorner)
         {
