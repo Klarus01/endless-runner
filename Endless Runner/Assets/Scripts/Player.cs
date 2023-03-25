@@ -6,17 +6,19 @@ public class Player : MonoBehaviour
     public TMP_Text pointsText;
 
     private Rigidbody rb;
+    private Animator anim;
     private SceneTrasitions sceneTransition;
 
-    public int health = 3;
+    private int health = 10;
     public float moveSpeed = 10f;
-    [SerializeField]
     private float maxMoveSpeed;
-    private float restorationSpeed = 5f;
+    private float moveRestorationSpeed = 10f;
+    private float resistanceToDamage;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        anim = GetComponent<Animator>();
         rb.freezeRotation = true;
         sceneTransition = FindObjectOfType<SceneTrasitions>();
     }
@@ -34,7 +36,11 @@ public class Player : MonoBehaviour
 
         if (moveSpeed < maxMoveSpeed)
         {
-            moveSpeed += restorationSpeed * Time.deltaTime;
+            moveSpeed += moveRestorationSpeed * Time.deltaTime;
+        }
+        if (resistanceToDamage > 0)
+        {
+            resistanceToDamage -= Time.deltaTime;
         }
 
         rb.velocity = transform.forward * moveSpeed;
@@ -42,9 +48,14 @@ public class Player : MonoBehaviour
 
     public void GiveDamege(int damage)
     {
+        if (resistanceToDamage > 0)
+            return;
+
         health -= damage;
         maxMoveSpeed = moveSpeed;
-        moveSpeed = maxMoveSpeed / 2;
+        moveSpeed = maxMoveSpeed / 4;
+        resistanceToDamage = 1;
+        anim.SetTrigger("isInviolable");
         if (health <= 0)
         {
             Destroy(gameObject);
