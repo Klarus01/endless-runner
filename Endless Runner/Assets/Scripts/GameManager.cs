@@ -4,16 +4,15 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField]
     private Player player;
+    public Material selectedMaterial;
 
     public static GameManager instance;
 
     public int points = 0;
     public int highscore = 0;
-    public int coins = 0;
+    public int coins = 100;
     public float pointsNeededToGetMoveSpeed = 10;
     private readonly float speedUpPlayer = 1.1f;
-
-
 
     private void Awake()
     {

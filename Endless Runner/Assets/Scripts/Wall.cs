@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Wall : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
         if (collision.gameObject.TryGetComponent<Player>(out Player player))
         {

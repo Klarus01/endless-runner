@@ -19,6 +19,7 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
+        GetComponent<MeshRenderer>().material = GameManager.instance.selectedMaterial;
         rb.freezeRotation = true;
         sceneTransition = FindObjectOfType<SceneTrasitions>();
     }
