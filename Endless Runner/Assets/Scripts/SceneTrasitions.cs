@@ -16,6 +16,5 @@ public class SceneTrasitions : MonoBehaviour
     public void DoExitGame()
     {
         Application.Quit();
-        Debug.Log("XD");
     }
 }

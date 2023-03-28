@@ -3,10 +3,8 @@ using UnityEngine;
 
 public class RoadManager : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject[] roadPrefabs;
-    [SerializeField]
-    private GameObject[] cornerPrefabs;
+    [SerializeField] private GameObject[] roadPrefabs;
+    [SerializeField] private GameObject[] cornerPrefabs;
     private List<GameObject> activeRoads = new();
 
     private int rotate = 0;

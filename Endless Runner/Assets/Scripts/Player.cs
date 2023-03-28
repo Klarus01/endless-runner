@@ -7,19 +7,22 @@ public class Player : MonoBehaviour
 
     private Rigidbody rb;
     private Animator anim;
+    private GameManager gm;
     private SceneTrasitions sceneTransition;
 
     private int health = 10;
-    public float moveSpeed = 10f;
+    private float rortateSpeed = 100f;
     private float maxMoveSpeed;
-    private float moveRestorationSpeed = 10f;
+    private readonly float moveRestorationSpeed = 10f;
     private float resistanceToDamage;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
-        GetComponent<MeshRenderer>().material = GameManager.instance.selectedMaterial;
+        gm = GameManager.instance;
+        maxMoveSpeed = gm.moveSpeed;
+        GetComponent<MeshRenderer>().material = gm.selectedMaterial;
         rb.freezeRotation = true;
         sceneTransition = FindObjectOfType<SceneTrasitions>();
     }
@@ -28,23 +31,23 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.A))
         {
-            transform.Rotate(Vector3.up, -100f * Time.deltaTime);
+            transform.Rotate(Vector3.up, -rortateSpeed * Time.deltaTime);
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            transform.Rotate(Vector3.up, 100f * Time.deltaTime);
+            transform.Rotate(Vector3.up, rortateSpeed * Time.deltaTime);
         }
 
-        if (moveSpeed < maxMoveSpeed)
+        if (gm.moveSpeed < maxMoveSpeed)
         {
-            moveSpeed += moveRestorationSpeed * Time.deltaTime;
+            gm.moveSpeed += moveRestorationSpeed * Time.deltaTime;
         }
         if (resistanceToDamage > 0)
         {
             resistanceToDamage -= Time.deltaTime;
         }
 
-        rb.velocity = transform.forward * moveSpeed;
+        rb.velocity = transform.forward * gm.moveSpeed;
     }
 
     public void GiveDamege(int damage)
@@ -53,12 +56,18 @@ public class Player : MonoBehaviour
             return;
 
         health -= damage;
-        maxMoveSpeed = moveSpeed;
-        moveSpeed = maxMoveSpeed / 4;
+        maxMoveSpeed = gm.moveSpeed;
+        gm.moveSpeed = maxMoveSpeed / 4;
         resistanceToDamage = 1;
         anim.SetTrigger("isInviolable");
         if (health <= 0)
         {
+            if (gm.points > gm.highscore)
+            {
+                gm.highscore = gm.points;
+            }
+            gm.moveSpeed = maxMoveSpeed;
+            gm.Save();
             Destroy(gameObject);
             sceneTransition.LoadScene("Menu");
         }
