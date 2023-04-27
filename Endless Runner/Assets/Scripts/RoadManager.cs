@@ -3,10 +3,7 @@ using UnityEngine;
 
 public class RoadManager : MonoBehaviour
 {
-    [SerializeField] private GameObject[] roadPrefabs;
-    [SerializeField] private GameObject[] cornerPrefabs;
-    private List<GameObject> activeRoads = new();
-
+    private int index;
     private int rotate = 0;
     private int zRoad = -10;
     private int xRoad = 0;
@@ -15,8 +12,14 @@ public class RoadManager : MonoBehaviour
     private int maxLengthToLastCorner = 3;
 
     private Transform playerTransform;
-    private Transform halfOfRoad;
+    private GameObject road;
     private GameObject lastPref;
+
+    private GameObject HalfwayRoad => activeRoads[activeRoads.Count / 2];
+    private List<GameObject> activeRoads = new();
+
+    [SerializeField] private GameObject[] roadPrefabs;
+    [SerializeField] private GameObject[] cornerPrefabs;
 
     private void Start()
     {
@@ -29,13 +32,13 @@ public class RoadManager : MonoBehaviour
         if (playerTransform == null)
             return;
 
-        float distanceToHalf = Vector3.Distance(playerTransform.position, halfOfRoad.position);
+        float distanceToHalf = Vector3.Distance(playerTransform.position, HalfwayRoad.transform.position);
 
         if (activeRoads.Count < 11)
         {
             if (distanceToHalf < 8f)
             {
-                TryDeleteRoad(activeRoads[0]);
+                DeleteFirstRoad();
                 SpawnRoad();
             }
         }
@@ -58,26 +61,17 @@ public class RoadManager : MonoBehaviour
 
     private void SpawnRoad(int index = -1)
     {
-        GameObject road;
-
         if (index != -1)
         {
             road = Instantiate(roadPrefabs[index]);
         }
         else if (lastCorner != maxLengthToLastCorner)
         {
-            do
-            {
-                index = Random.Range(0, roadPrefabs.Length);
-            } while (index == previousIndex);
-            road = Instantiate(roadPrefabs[index]);
+            InstantiateRandomRoad();
         }
         else
         {
-            lastCorner = 0;
-            maxLengthToLastCorner = Random.Range(4, 6);
-            index = Random.Range(0, cornerPrefabs.Length);
-            road = Instantiate(cornerPrefabs[index]);
+            InstantiateCornerRoad();
         }
 
         lastCorner++;
@@ -105,11 +99,11 @@ public class RoadManager : MonoBehaviour
         road.transform.position = roadPlace;
         road.transform.Rotate(0, rotate, 0);
 
-        if (lastPref.CompareTag("TurnLeft"))
+        if (lastPref.GetComponent<Road>().id.Equals(1)) // left
         {
             rotate -= 90;
         }
-        else if (lastPref.CompareTag("TurnRight"))
+        else if (lastPref.GetComponent<Road>().id.Equals(2)) // right
         {
             rotate += 90;
         }
@@ -121,15 +115,33 @@ public class RoadManager : MonoBehaviour
 
         activeRoads.Add(road);
         previousIndex = index;
-        halfOfRoad = activeRoads[activeRoads.Count / 2].transform;
     }
 
-    private void TryDeleteRoad(GameObject roadToDestroy)
+    private void InstantiateRandomRoad()
     {
-        if (activeRoads.Count >= 10)
+        do
         {
-            activeRoads.RemoveAt(0);
-            Destroy(roadToDestroy);
+            index = Random.Range(0, roadPrefabs.Length);
+        } while (index == previousIndex);
+        road = Instantiate(roadPrefabs[index]);
+    }
+
+    private void InstantiateCornerRoad()
+    {
+        lastCorner = 0;
+        maxLengthToLastCorner = Random.Range(4, 6);
+        index = Random.Range(0, cornerPrefabs.Length);
+        road = Instantiate(cornerPrefabs[index]);
+    }
+
+    private void DeleteFirstRoad()
+    {
+        if (activeRoads.Count < 10)
+        {
+            return;
         }
+
+        Destroy(activeRoads[0]);
+        activeRoads.RemoveAt(0);
     }
 }

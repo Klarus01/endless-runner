@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -5,71 +6,83 @@ public class Player : MonoBehaviour
 {
     public TMP_Text pointsText;
 
-    private Rigidbody rb;
-    private Animator anim;
-    private GameManager gm;
-    private SceneTrasitions sceneTransition;
-
-    private int health = 10;
-    private float rortateSpeed = 100f;
-    private float maxMoveSpeed;
+    private int hp;
+    private float rotate;
+    private float speed;
     private readonly float moveRestorationSpeed = 10f;
     private float resistanceToDamage;
 
+    private Rigidbody rb;
+    private Animator anim;
+    public Action OnDeath;
+
+    [SerializeField] private PlayerStats playerStats;
+
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
-        anim = GetComponent<Animator>();
-        gm = GameManager.instance;
-        maxMoveSpeed = gm.moveSpeed;
-        GetComponent<MeshRenderer>().material = gm.selectedMaterial;
-        rb.freezeRotation = true;
-        sceneTransition = FindObjectOfType<SceneTrasitions>();
+        SetupStartingStats();
     }
 
     private void Update()
     {
         if (Input.GetKey(KeyCode.A))
         {
-            transform.Rotate(Vector3.up, -rortateSpeed * Time.deltaTime);
+            transform.Rotate(Vector3.up, -rotate * Time.deltaTime);
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            transform.Rotate(Vector3.up, rortateSpeed * Time.deltaTime);
+            transform.Rotate(Vector3.up, rotate * Time.deltaTime);
         }
 
-        if (gm.moveSpeed < maxMoveSpeed)
+        IsPlayerResistanceToDamage();
+        IsPlayerSlowed();
+
+        rb.velocity = transform.forward * speed;
+    }
+
+    private void SetupStartingStats()
+    {
+        hp = playerStats.maxHealth;
+        playerStats.tempMaxMoveSpeed = playerStats.maxMoveSpeed;
+        speed = playerStats.maxMoveSpeed;
+        rotate = playerStats.maxRotateSpeed;
+
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
+        anim = GetComponent<Animator>();
+        GetComponent<MeshRenderer>().material = playerStats.selectedMaterial;
+    }
+
+    public void IsPlayerResistanceToDamage()
+    {
+        if (resistanceToDamage <= 0)
         {
-            gm.moveSpeed += moveRestorationSpeed * Time.deltaTime;
-        }
-        if (resistanceToDamage > 0)
-        {
-            resistanceToDamage -= Time.deltaTime;
+            return;
         }
 
-        rb.velocity = transform.forward * gm.moveSpeed;
+        resistanceToDamage -= Time.deltaTime;
+    }
+
+    public void IsPlayerSlowed()
+    {
+        if (speed >= playerStats.tempMaxMoveSpeed)
+        {
+            return;
+        }
+        speed += moveRestorationSpeed * Time.deltaTime;
     }
 
     public void GiveDamege(int damage)
     {
-        if (resistanceToDamage > 0)
-            return;
+        IsPlayerResistanceToDamage();
 
-        health -= damage;
-        maxMoveSpeed = gm.moveSpeed;
-        gm.moveSpeed = maxMoveSpeed / 4;
+        hp -= damage;
+        speed = playerStats.TempSpeed;
         resistanceToDamage = 1;
         anim.SetTrigger("isInviolable");
-        if (health <= 0)
+        if (hp <= 0)
         {
-            if (gm.points > gm.highscore)
-            {
-                gm.highscore = gm.points;
-            }
-            gm.moveSpeed = maxMoveSpeed;
-            gm.Save();
-            Destroy(gameObject);
-            sceneTransition.LoadScene("Menu");
+            OnDeath.Invoke();
         }
     }
 }

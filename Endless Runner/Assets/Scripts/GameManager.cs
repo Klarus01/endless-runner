@@ -1,33 +1,65 @@
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : SingletonMonobehaviour<GameManager>
 {
-    [SerializeField] private Player player;
-    public Material selectedMaterial;
+    public Player player;
+    public PlayerStats playerStats;
 
-    public static GameManager instance;
-
-    public int points = 0;
     public int highscore = 0;
-    public int coins = 100;
-    public float moveSpeed = 10f;
-    public float pointsNeededToGetMoveSpeed = 10;
+    public int coins = 0;
+    public int points = 0;
+    private float pointsNeededToGetMoveSpeed = 10;
     private readonly float speedUpPlayer = 1.1f;
 
-    private void Awake()
+    protected override void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
+        base.Awake();
+        Load();
+        player.OnDeath += OnPlayerDied;
         InvokeRepeating(nameof(SpawnPoints), 1f, 1f);
+    }
+
+    private void OnPlayerDied()
+    {
+        if (points > highscore)
+        {
+            highscore = points;
+        }
+        Destroy(player.gameObject);
+        OnSceneTransition(1);
+    }
+
+    public void AddCoins()
+    {
+        coins += playerStats.coinValue;
+        SpawnPoints();
+    }
+
+    public void OnSceneTransition(int sceneID)
+    {
+        Save();
+        if (sceneID.Equals(0))
+        {
+            points = 0;
+            pointsNeededToGetMoveSpeed = 10;
+        }
+        SceneManager.LoadScene(sceneID);
+    }
+
+    public void SpawnPoints()
+    {
+        points++;
+        if (player = FindObjectOfType<Player>())
+        {
+            player.pointsText.SetText(points.ToString());
+        }
+        if (points >= pointsNeededToGetMoveSpeed)
+        {
+            playerStats.tempMaxMoveSpeed *= speedUpPlayer;
+            pointsNeededToGetMoveSpeed += pointsNeededToGetMoveSpeed;
+        }
     }
 
     public void Save()
@@ -36,13 +68,12 @@ public class GameManager : MonoBehaviour
         {
             coins = coins,
             highscore = highscore,
-            selectedMaterial = selectedMaterial,
+            selectedMaterial = playerStats.selectedMaterial,
         };
         string json = JsonUtility.ToJson(save);
 
         File.WriteAllText(Application.dataPath + "/save.txt", json);
     }
-
 
     private void Load()
     {
@@ -54,22 +85,7 @@ public class GameManager : MonoBehaviour
 
             coins = saveObject.coins;
             highscore = saveObject.highscore;
-            selectedMaterial = saveObject.selectedMaterial;
-        }
-    }
-
-    public void SpawnPoints()
-    {
-        player = FindObjectOfType<Player>();
-        if (player == null)
-            return;
-
-        points++;
-        player.pointsText.SetText(points.ToString());
-        if (points > pointsNeededToGetMoveSpeed)
-        {
-            moveSpeed *= speedUpPlayer;
-            pointsNeededToGetMoveSpeed += pointsNeededToGetMoveSpeed;
+            playerStats.selectedMaterial = saveObject.selectedMaterial;
         }
     }
 }
@@ -79,5 +95,4 @@ public class SaveObject
     public int coins;
     public int highscore;
     public Material selectedMaterial;
-    public GameObject[] colorUnlocked;
 }

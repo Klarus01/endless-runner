@@ -6,8 +6,7 @@ public class Coin : MonoBehaviour
     {
         if (other.GetComponent<Player>())
         {
-            GameManager.instance.coins++;
-            GameManager.instance.SpawnPoints();
+            GameManager.Instance.AddCoins();
             Destroy(gameObject);
         }
     }

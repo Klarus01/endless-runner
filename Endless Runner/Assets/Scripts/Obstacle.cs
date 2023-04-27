@@ -2,9 +2,8 @@ using UnityEngine;
 
 public class Obstacle : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject destroyPrefab;
-    private float knockbackForce = 10000f;
+    private readonly float knockbackForce = 10000f;
+    [SerializeField] private GameObject destroyPrefab;
 
     private void OnCollisionEnter(Collision collision)
     {
