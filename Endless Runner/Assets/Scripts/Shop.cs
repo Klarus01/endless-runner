@@ -29,19 +29,24 @@ public class Shop : MonoBehaviour
     private void SetUpButtons()
     {
         exitButton.onClick.AddListener(BackToMenu);
-        buyButtons[0].onClick.AddListener(() => BuyColor(shopItems[0]));
-        buyButtons[1].onClick.AddListener(() => BuyColor(shopItems[1]));
-        buyButtons[2].onClick.AddListener(() => BuyColor(shopItems[2]));
-        buyButtons[3].onClick.AddListener(() => BuyColor(shopItems[3]));
-        buyButtons[4].onClick.AddListener(() => BuyUpgrade(shopItems[4]));
-        buyButtons[5].onClick.AddListener(() => BuyUpgrade(shopItems[5]));
-        buyButtons[6].onClick.AddListener(() => BuyUpgrade(shopItems[6]));
-        buyButtons[7].onClick.AddListener(() => BuyUpgrade(shopItems[7]));
+        for (int i = 0; i < buyButtons.Length; i++)
+        {
+            int index = i;
+            if (i < 4)
+            {
+                buyButtons[index].onClick.AddListener(() => BuyColor(shopItems[index]));
+            }
+            else
+            {
+                buyButtons[index].onClick.AddListener(() => BuyUpgrade(shopItems[index]));
+            }
+        }
 
-        changeColorButtons[0].onClick.AddListener(() => SetColor(shopItems[0].id));
-        changeColorButtons[1].onClick.AddListener(() => SetColor(shopItems[1].id));
-        changeColorButtons[2].onClick.AddListener(() => SetColor(shopItems[2].id));
-        changeColorButtons[3].onClick.AddListener(() => SetColor(shopItems[3].id));
+        for (int j = 0; j < changeColorButtons.Length; j++)
+        {
+            int index = j;
+            changeColorButtons[index].onClick.AddListener(() => SetColor(shopItems[index].id));
+        }
     }
 
     private void BackToMenu()
